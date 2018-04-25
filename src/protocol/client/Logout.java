@@ -10,4 +10,8 @@ public class Logout extends ClientMessage {
     public String getUserName() {
         return userName;
     }
+
+    public String toString() {
+        return String.format("SORT/%s/\n", getUserName());
+    }
 }

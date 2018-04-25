@@ -13,11 +13,11 @@ public class Found extends ClientMessage {
         return word;
     }
 
-    public void setWord(String word) {
-        this.word = word;
-    }
-
     public String getTrajectory() {
         return trajectory;
+    }
+
+    public String toString() {
+        return String.format("TROUVE/%s/%s/\n", getWord(), getTrajectory());
     }
 }

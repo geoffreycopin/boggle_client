@@ -10,4 +10,8 @@ public class Login extends ClientMessage {
     public String getUserName() {
         return userName;
     }
+
+    public String toString() {
+        return String.format("CONNEXION/%s/\n", getUserName());
+    }
 }
