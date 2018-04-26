@@ -8,14 +8,11 @@ import java.io.*;
 import java.net.Socket;
 
 public class BoggleClient implements Runnable {
-    private String userName;
     private BufferedReader input;
     private DataOutputStream output;
     private BoggleClientListener listener;
 
-    public BoggleClient(String userName, String address, int port) throws IOException {
-        this.userName = userName;
-        Socket socket = new Socket(address, port);
+    public BoggleClient(Socket socket) throws IOException {
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         output = new DataOutputStream(socket.getOutputStream());
     }
@@ -37,7 +34,7 @@ public class BoggleClient implements Runnable {
             listener.onDisconnected(d.getUserName());
         } else if (message instanceof Welcome) {
             Welcome w = (Welcome) message;
-            listener.onWelcome(w.getGrid(), w.getScores());
+            listener.onWelcome(w);
         } else if (message instanceof Winner) {
             Winner w = (Winner) message;
             listener.onWinner(w.getScores());
@@ -59,7 +56,7 @@ public class BoggleClient implements Runnable {
     }
 
     public void makeRequest(ClientMessage request) throws IOException {
-        output.writeChars(request.toString());
+        output.writeBytes(request.toString());
     }
 
     @Override
@@ -69,6 +66,7 @@ public class BoggleClient implements Runnable {
                 ServerMessage m = ServerMessage.parse(l);
                 listen(m);
             } catch (ParsingError e) {
+                System.err.println("Error while parsing: " + l);
                 System.err.println(e.getMessage());
             }
         });

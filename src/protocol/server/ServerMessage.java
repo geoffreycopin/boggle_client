@@ -2,6 +2,9 @@ package protocol.server;
 
 import errors.ParsingError;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public abstract class ServerMessage {
     public static ServerMessage parse(String message) throws ParsingError {
         if (message.isEmpty()) {
@@ -9,7 +12,7 @@ public abstract class ServerMessage {
         }
         String[] components = message.split("/");
         switch (components[0]) {
-            case "BIENVENUE": return parseWelcome(components);
+            case "BIENVENUE": return parseWelcome(message);
             case "CONNECTE": return parseConnected(components);
             case "DECONNEXION": return parseDisconnected(components);
             case "SESSION": return new SessionStart();
@@ -24,13 +27,16 @@ public abstract class ServerMessage {
         throw new ParsingError("Invalid message !");
     }
 
-    private static Welcome parseWelcome(String[] components) throws ParsingError {
-        if (components.length < 3) {
+    private static Welcome parseWelcome(String request) throws ParsingError {
+        Matcher m = Pattern.compile("BIENVENUE/([a-zA-Z]+)/([0-9]+)(.+)/").matcher(request);
+        if (! m.find()) {
             throw new ParsingError("Grid or scores missing !");
         }
-        String grid  = components[1];
-        String scores = components[2];
-        return new Welcome(grid, scores);
+
+        String grid  = m.group(1);
+        Integer turn = Integer.valueOf(m.group(2));
+        String scores = m.group(3);
+        return new Welcome(grid, turn, scores);
     }
 
     private static Connected parseConnected(String[] components) throws ParsingError {

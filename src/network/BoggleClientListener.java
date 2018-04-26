@@ -1,7 +1,9 @@
 package network;
 
+import protocol.server.Welcome;
+
 public interface BoggleClientListener {
-    void onWelcome(String grid, String scores);
+    void onWelcome(Welcome w);
     void onConnected(String userName);
     void onDisconnected(String userName);
     void onWinner(String scores);

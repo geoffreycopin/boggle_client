@@ -1,19 +1,27 @@
 package protocol.server;
 
-public class Welcome extends ServerMessage {
-    private String grid;
-    private String scores;
+import errors.ParsingError;
+import game.Grid;
+import game.Scores;
 
-    public Welcome(String grid, String scores) {
-        this.grid = grid;
-        this.scores = scores;
+import java.util.HashMap;
+
+public class Welcome extends ServerMessage {
+    private int turn;
+    private Grid grid;
+    private HashMap<String, Integer> scores;
+
+    public Welcome(String grid, int turn, String scores) throws ParsingError {
+        this.grid = Grid.fromString(grid);
+        this.turn = turn;
+        this.scores = Scores.parseScores(scores);
     }
 
-    public String getGrid() {
+    public Grid getGrid() {
         return grid;
     }
 
-    public String getScores() {
+    public HashMap<String, Integer> getScores() {
         return scores;
     }
 }
