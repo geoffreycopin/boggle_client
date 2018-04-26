@@ -1,13 +1,16 @@
 package protocol.server;
 
-public class TurnStart extends ServerMessage {
-    private String grid;
+import errors.ParsingError;
+import game.Grid;
 
-    public TurnStart(String grid) {
-        this.grid = grid;
+public class TurnStart extends ServerMessage {
+    private Grid grid;
+
+    public TurnStart(String grid) throws ParsingError {
+        this.grid = Grid.fromString(grid);
     }
 
-    public String getGrid() {
+    public Grid getGrid() {
         return grid;
     }
 }

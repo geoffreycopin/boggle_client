@@ -17,6 +17,10 @@ public class Welcome extends ServerMessage {
         this.scores = Scores.parseScores(scores);
     }
 
+    public int getTurn() {
+        return turn;
+    }
+
     public Grid getGrid() {
         return grid;
     }

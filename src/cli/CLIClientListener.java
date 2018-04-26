@@ -4,7 +4,7 @@ import errors.ParsingError;
 import network.BoggleClient;
 import network.BoggleClientListener;
 import protocol.client.ClientMessage;
-import protocol.server.Welcome;
+import protocol.server.*;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -51,22 +51,22 @@ public class CLIClientListener implements BoggleClientListener {
     }
 
     @Override
-    public void onConnected(String userName) {
+    public void onConnected(Connected c) {
         // TODO: implement
     }
 
     @Override
-    public void onDisconnected(String userName) {
+    public void onDisconnected(Disconnected d) {
         // TODO: implement
     }
 
     @Override
-    public void onWinner(String scores) {
+    public void onWinner(Winner w) {
         // TODO: implement
     }
 
     @Override
-    public void onTurnStart(String grid) {
+    public void onTurnStart(TurnStart t) {
         // TODO: implement
     }
 
@@ -76,17 +76,17 @@ public class CLIClientListener implements BoggleClientListener {
     }
 
     @Override
-    public void onValidWord(String word) {
+    public void onValidWord(ValidWord v) {
         // TODO: implement
     }
 
     @Override
-    public void onInvalidWord(String reason) {
+    public void onInvalidWord(InvalidWord i) {
         // TODO: implement
     }
 
     @Override
-    public void onTurnResult(String words, String scores) {
+    public void onTurnResult(TurnResults t) {
         // TODO: implement
     }
 }

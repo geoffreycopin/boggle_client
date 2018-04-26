@@ -1,19 +1,25 @@
 package protocol.server;
 
-public class TurnResults extends ServerMessage {
-    private String words;
-    private String scores;
+import errors.ParsingError;
+import game.Scores;
 
-    public TurnResults(String words, String scores) {
-        this.words = words;
-        this.scores = scores;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class TurnResults extends ServerMessage {
+    private HashMap<String, ArrayList<String>> words;
+    private HashMap<String, Integer> scores;
+
+    public TurnResults(String words, String scores) throws ParsingError {
+        this.scores = Scores.parseScores(scores);
+        this.words = Scores.parsePlayedWords(this.scores.keySet(), words);
     }
 
-    public String getWords() {
+    public HashMap<String, ArrayList<String>> getWords() {
         return words;
     }
 
-    public String getScores() {
+    public HashMap<String, Integer> getScores() {
         return scores;
     }
 }

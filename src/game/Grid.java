@@ -27,4 +27,20 @@ public class Grid {
     public char getLetter(int index) {
         return grid[index];
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (! (obj instanceof Grid)) {
+            return false;
+        }
+        Grid other = (Grid) obj;
+
+        for (int i = 0; i < 16; i++) {
+            if (grid[i] != other.grid[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

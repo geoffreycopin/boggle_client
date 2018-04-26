@@ -27,31 +27,23 @@ public class BoggleClient implements Runnable {
         }
 
         if (message instanceof Connected) {
-            Connected c = (Connected) message;
-            listener.onConnected(c.getUserName());
+            listener.onConnected((Connected) message);
         } else if (message instanceof Disconnected) {
-            Disconnected d = (Disconnected) message;
-            listener.onDisconnected(d.getUserName());
+            listener.onDisconnected((Disconnected) message);
         } else if (message instanceof Welcome) {
-            Welcome w = (Welcome) message;
-            listener.onWelcome(w);
+            listener.onWelcome((Welcome) message);
         } else if (message instanceof Winner) {
-            Winner w = (Winner) message;
-            listener.onWinner(w.getScores());
+            listener.onWinner((Winner) message);
         } else if (message instanceof TurnStart) {
-            TurnStart ts = (TurnStart) message;
-            listener.onTurnStart(ts.getGrid());
+            listener.onTurnStart((TurnStart) message);
         } else if (message instanceof TurnEnd) {
             listener.onTurnEnd();
         } else if (message instanceof ValidWord) {
-            ValidWord v = (ValidWord) message;
-            listener.onValidWord(v.getWord());
+            listener.onValidWord((ValidWord) message);
         } else if (message instanceof InvalidWord) {
-            InvalidWord i = (InvalidWord) message;
-            listener.onInvalidWord(i.getWhy());
+            listener.onInvalidWord((InvalidWord) message);
         } else if (message instanceof TurnResults) {
-            TurnResults ts = (TurnResults) message;
-            listener.onTurnResult(ts.getWords(), ts.getScores());
+            listener.onTurnResult((TurnResults) message);
         }
     }
 

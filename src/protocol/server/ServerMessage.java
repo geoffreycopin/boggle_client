@@ -28,7 +28,7 @@ public abstract class ServerMessage {
     }
 
     private static Welcome parseWelcome(String request) throws ParsingError {
-        Matcher m = Pattern.compile("BIENVENUE/([a-zA-Z]+)/([0-9]+)(.+)/").matcher(request);
+        Matcher m = Pattern.compile("BIENVENUE/([a-zA-Z]+)/([0-9]+)\\*(.+)/").matcher(request);
         if (! m.find()) {
             throw new ParsingError("Grid or scores missing !");
         }

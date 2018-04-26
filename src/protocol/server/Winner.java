@@ -1,13 +1,18 @@
 package protocol.server;
 
-public class Winner extends ServerMessage {
-    private String scores;
+import errors.ParsingError;
+import game.Scores;
 
-    public Winner(String scores) {
-        this.scores = scores;
+import java.util.HashMap;
+
+public class Winner extends ServerMessage {
+    private HashMap<String, Integer> scores;
+
+    public Winner(String scores) throws ParsingError {
+        this.scores = Scores.parseScores(scores);
     }
 
-    public String getScores() {
+    public HashMap<String, Integer> getScores() {
         return scores;
     }
 }

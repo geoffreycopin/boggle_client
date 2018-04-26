@@ -4,18 +4,18 @@ import errors.ParsingError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Set;
 
 public class Scores {
     public static HashMap<String, Integer> parseScores(String scores) throws ParsingError {
-        if (! scores.matches("([a-zA-Z]*\\*\\d)+")) {
+        if (! scores.matches("(\\w+\\*\\d+)(\\*(\\w+\\*\\d+))?")) {
             throw new ParsingError(scores + " is not a valid scores String !");
         }
 
         HashMap<String, Integer> result = new HashMap<>();
         String[] components = scores.split("\\*");
 
-        for (int i = 0; i < components.length / 2; i += 2) {
+        for (int i = 0; i <= components.length / 2; i += 2) {
             String userName = components[i];
             Integer score = Integer.valueOf(components[i + 1]);
             result.put(userName, score);
@@ -24,7 +24,7 @@ public class Scores {
         return result;
     }
 
-    public static HashMap<String, ArrayList<String>> parsePlayedWords(HashSet<String> players,
+    public static HashMap<String, ArrayList<String>> parsePlayedWords(Set<String> players,
                                                                       String words) throws ParsingError {
         if (! words.matches("\\w\\*\\w(\\*\\w)*")) {
             throw new ParsingError(words + " is not a valid words String !");
