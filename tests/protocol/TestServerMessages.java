@@ -70,7 +70,7 @@ public class TestServerMessages {
 
     @Test
     public void parseTurnResults() throws ParsingError {
-        TurnResults tr = (TurnResults) ServerMessage.parse("BILANMOTS/user1*trident*user2*ile/user1*5*user2*2");
+        TurnResults tr = (TurnResults) ServerMessage.parse("BILANMOTS/user1*trident*user2*ile/user1*5*user2*2/");
         HashMap<String, ArrayList<String>> words = new HashMap<>();
 
         ArrayList<String> w1 = new ArrayList<>();

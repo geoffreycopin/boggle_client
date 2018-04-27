@@ -26,7 +26,7 @@ public class Scores {
 
     public static HashMap<String, ArrayList<String>> parsePlayedWords(Set<String> players,
                                                                       String words) throws ParsingError {
-        if (! words.matches("\\w\\*\\w(\\*\\w)*")) {
+        if (! words.matches("\\w+\\*\\w+(\\*\\w+)*")) {
             throw new ParsingError(words + " is not a valid words String !");
         }
 
