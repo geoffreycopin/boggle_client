@@ -1,6 +1,7 @@
 package game;
 
 import errors.ParsingError;
+import javafx.util.Pair;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -25,5 +26,17 @@ public class TestGrid {
     public void fromStringFailIfWrongCharacter() throws ParsingError {
         String letters = "AZERTYUIOPQSDFG5";
         Grid.fromString(letters);
+    }
+
+    @Test
+    public void indexOfCoordinates() {
+        assertEquals(0, Grid.indexOfCoordinates('A', 1));
+        assertEquals(15, Grid.indexOfCoordinates('D', 4));
+    }
+
+    @Test
+    public void coordinatesOfIndex() {
+        assertEquals(new Pair<>('A', 1), Grid.coordinatesOfIndex(0));
+        assertEquals(new Pair<>('D', 4), Grid.coordinatesOfIndex(15));
     }
 }

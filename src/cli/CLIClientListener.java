@@ -1,16 +1,19 @@
 package cli;
 
 import errors.ParsingError;
+import game.Grid;
 import network.BoggleClient;
 import network.BoggleClientListener;
 import protocol.client.ClientMessage;
 import protocol.server.*;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class CLIClientListener implements BoggleClientListener {
     BoggleClient client;
+    int turn;
 
     public CLIClientListener(BoggleClient client) {
         this.client = client;
@@ -22,10 +25,7 @@ public class CLIClientListener implements BoggleClientListener {
         while (input.hasNext()) {
             String line = input.nextLine();
             try {
-                client.makeRequest(ClientMessage.parse(line));
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.exit(1);
+                client.addRequests(ClientMessage.parse(line));
             } catch (ParsingError parsingError) {
                 System.out.println(parsingError.getMessage());
             }
@@ -34,59 +34,88 @@ public class CLIClientListener implements BoggleClientListener {
 
     @Override
     public void onWelcome(Welcome w) {
+        turn = w.getTurn();
+        printGrid(w.getGrid(), w.getTurn());
+        printScores(w.getScores());
+    }
+
+    @Override
+    public void onConnected(Connected c) {
+        System.out.println(c.getUserName() + " vient de se connecter !");
+    }
+
+    @Override
+    public void onDisconnected(Disconnected d) {
+        System.out.println(d.getUserName() + " vient de se déconnecter !");
+    }
+
+    @Override
+    public void onWinner(Winner w) {
+        System.out.println("## FIN DE LA SESSION ##");
+        printScores(w.getScores());
+    }
+
+    @Override
+    public void onTurnStart(TurnStart t) {
+        System.out.println("##### DEBUT DU TOUR #####");
+        printGrid(t.getGrid(), turn + 1);
+    }
+
+    @Override
+    public void onTurnEnd() {
+        System.out.println("##### FIN DU TOUR #####\n");
+    }
+
+    @Override
+    public void onValidWord(ValidWord v) {
+        System.out.println("Le mot " + v.getWord() + " a été accepté !\n");
+    }
+
+    @Override
+    public void onInvalidWord(InvalidWord i) {
+        System.out.println("Refus: " + i.getWhy() + "\n");
+    }
+
+    @Override
+    public void onTurnResult(TurnResults t) {
+        System.out.println("#### BILAN DU TOUR ####");
+        printScores(t.getScores());
+        printWords(t.getWords());
+    }
+
+    @Override
+    public void onTerminate() {
+        System.exit(0);
+    }
+
+    private void printGrid(Grid grid, int turn) {
+        System.out.println("######## TOUR" + turn + " ########");
         System.out.print("\n");
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                char c =w.getGrid().getLetter((i * 4) + j);
+                char c = grid.getLetter((i * 4) + j);
                 System.out.print(c + " ");
             }
             System.out.print("\n");
         }
         System.out.print("\n");
+    }
 
-        for (String player: w.getScores().keySet()) {
-            System.out.println(player + ": " + w.getScores().get(player));
+    private void printScores(HashMap<String, Integer> scores) {
+        System.out.println("######## SCORES #######");
+        System.out.print("\n");
+        for (String player: scores.keySet()) {
+            System.out.println(player + ": " + scores.get(player));
         }
-        System.out.println("\n");
+        System.out.print("\n");
     }
 
-    @Override
-    public void onConnected(Connected c) {
-        // TODO: implement
-    }
-
-    @Override
-    public void onDisconnected(Disconnected d) {
-        // TODO: implement
-    }
-
-    @Override
-    public void onWinner(Winner w) {
-        // TODO: implement
-    }
-
-    @Override
-    public void onTurnStart(TurnStart t) {
-        // TODO: implement
-    }
-
-    @Override
-    public void onTurnEnd() {
-        // TODO: implement
-    }
-
-    @Override
-    public void onValidWord(ValidWord v) {
-        // TODO: implement
-    }
-
-    @Override
-    public void onInvalidWord(InvalidWord i) {
-        // TODO: implement
-    }
-
-    @Override
-    public void onTurnResult(TurnResults t) {
-        // TODO: implement
+    private void printWords(HashMap<String, ArrayList<String>> words) {
+        System.out.println("######### MOTS ########");
+        System.out.print("\n");
+        for (String player: words.keySet()) {
+            System.out.println(player + ": " + words.get(player));
+        }
+        System.out.print("\n");
     }
 }

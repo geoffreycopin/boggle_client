@@ -12,4 +12,5 @@ public interface BoggleClientListener {
     void onValidWord(ValidWord v);
     void onInvalidWord(InvalidWord i);
     void onTurnResult(TurnResults t);
+    void onTerminate();
 }

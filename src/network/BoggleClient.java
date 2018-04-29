@@ -4,13 +4,19 @@ import errors.ParsingError;
 import protocol.client.ClientMessage;
 import protocol.server.*;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class BoggleClient implements Runnable {
     private BufferedReader input;
     private DataOutputStream output;
     private BoggleClientListener listener;
+    private final ArrayList<ClientMessage> pendingRequests = new ArrayList<>();
+    private Thread sender;
 
     public BoggleClient(Socket socket) throws IOException {
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -47,12 +53,16 @@ public class BoggleClient implements Runnable {
         }
     }
 
-    public void makeRequest(ClientMessage request) throws IOException {
-        output.writeBytes(request.toString());
+    public void addRequests(ClientMessage request) {
+        synchronized (pendingRequests) {
+            pendingRequests.add(request);
+            pendingRequests.notify();
+        }
     }
 
     @Override
     public void run() {
+        startSender();
         input.lines().forEach((l) -> {
             try {
                 ServerMessage m = ServerMessage.parse(l);
@@ -62,5 +72,32 @@ public class BoggleClient implements Runnable {
                 System.err.println(e.getMessage());
             }
         });
+        sender.interrupt();
+        listener.onTerminate();
+    }
+
+    private void startSender() {
+        sender = new Thread(() -> {
+            try {
+                sendRequest();
+            } catch (InterruptedException e) {
+                // do nothing
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        sender.start();
+    }
+
+    public void sendRequest() throws InterruptedException, IOException {
+        synchronized (pendingRequests) {
+            while(true) {
+                while (pendingRequests.isEmpty()) {
+                    pendingRequests.wait();
+                }
+                ClientMessage request = pendingRequests.remove(pendingRequests.size() - 1);
+                output.writeBytes(request.toString());
+            }
+        }
     }
 }
