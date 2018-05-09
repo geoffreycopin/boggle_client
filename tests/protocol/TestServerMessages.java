@@ -88,4 +88,18 @@ public class TestServerMessages {
         assertEquals(words, tr.getWords());
         assertEquals(scores, tr.getScores());
     }
+
+    @Test
+    public void parseReceived() throws ParsingError {
+        Received r = (Received) ServerMessage.parse("RECEPTION/Hello World/");
+        assertEquals("Hello World", r.getMessage());
+        assertEquals("", r.getSender());
+    }
+
+    @Test
+    public void parseReceivedPrivate() throws ParsingError {
+        Received r = (Received) ServerMessage.parse("PRECEPTION/Hello World/user1/");
+        assertEquals("Hello World", r.getMessage());
+        assertEquals("user1", r.getSender());
+    }
 }

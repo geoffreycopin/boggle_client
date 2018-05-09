@@ -81,6 +81,11 @@ public class Controller implements BoggleClientListener {
         // TODO: implement
     }
 
+    @Override
+    public void onReceived(Received r) {
+        // TODO: implement
+    }
+
     private void setGrid(Grid g) {
         grid.clear();
         for (char c: g.getGrid()) {

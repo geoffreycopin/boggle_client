@@ -18,6 +18,6 @@ public class Found extends ClientMessage {
     }
 
     public String toString() {
-        return String.format("TROUVE/%s/%s/\n", getWord(), getTrajectory());
+        return String.format("TROUVE/%s/%s/", getWord(), getTrajectory());
     }
 }

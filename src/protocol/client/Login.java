@@ -12,6 +12,6 @@ public class Login extends ClientMessage {
     }
 
     public String toString() {
-        return String.format("CONNEXION/%s/\n", getUserName());
+        return String.format("CONNEXION/%s/", getUserName());
     }
 }

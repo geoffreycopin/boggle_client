@@ -88,6 +88,19 @@ public class CLIClientListener implements BoggleClientListener {
         System.exit(0);
     }
 
+    @Override
+    public void onReceived(Received r) {
+        StringBuilder message = new StringBuilder("Message");
+        if (! r.getSender().isEmpty()) {
+            message.append(" (");
+            message.append(r.getSender());
+            message.append(')');
+        }
+        message.append(": ");
+        message.append(r.getMessage());
+        System.out.println(message + "\n");
+    }
+
     private void printGrid(Grid grid, int turn) {
         System.out.println("######## TOUR" + turn + " ########");
         System.out.print("\n");

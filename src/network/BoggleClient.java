@@ -50,6 +50,8 @@ public class BoggleClient implements Runnable {
             listener.onInvalidWord((InvalidWord) message);
         } else if (message instanceof TurnResults) {
             listener.onTurnResult((TurnResults) message);
+        } else if (message instanceof Received) {
+            listener.onReceived((Received) message);
         }
     }
 
@@ -96,7 +98,7 @@ public class BoggleClient implements Runnable {
                     pendingRequests.wait();
                 }
                 ClientMessage request = pendingRequests.remove(pendingRequests.size() - 1);
-                output.writeBytes(request.toString());
+                output.writeBytes(request.toString() + '\n');
             }
         }
     }
