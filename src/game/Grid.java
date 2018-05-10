@@ -3,7 +3,7 @@ package game;
 import errors.ParsingError;
 import javafx.util.Pair;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Grid {
     char[] grid;
@@ -20,9 +20,12 @@ public class Grid {
     }
 
     public String getWord(Trajectory t) {
-        return Arrays.stream(t.getIndexes())
-                .map((i) -> grid[i])
-                .toString();
+        StringBuilder result = new StringBuilder();
+        for (Integer idx: t.getIndexes()) {
+            result.append(grid[idx]);
+        }
+
+        return result.toString();
     }
 
     public char[] getGrid() {
@@ -36,6 +39,19 @@ public class Grid {
     public char getLetter(char line, int column) {
         int index = Grid.indexOfCoordinates(line, column);
         return getLetter(index);
+    }
+
+    public ArrayList<Pair<Character, Integer>> coordinatesArround(char line, int column) {
+        ArrayList<Pair<Character, Integer>> result = new ArrayList<>();
+        for (int l = lineOfLetter(line) - 1; l <= lineOfLetter(line) + 1; l++) {
+            for (int r = column - 1; r <= column + 1; r++) {
+                if ((l == lineOfLetter(line) && r == column) || l < 1 || r < 1 || l > 4 || r > 4) {
+                    continue;
+                }
+                result.add(new Pair<>(letterOfLine(l), r));
+            }
+        }
+        return result;
     }
 
     @Override
@@ -66,7 +82,7 @@ public class Grid {
         return (4 * l) + c;
     }
 
-    private static Character letterOfLine(int column) {
+    public static Character letterOfLine(int column) {
         switch (column) {
             case 1: return 'A';
             case 2: return 'B';
@@ -76,7 +92,7 @@ public class Grid {
         }
     }
 
-    private static Integer lineOfLetter(char line) {
+    public static Integer lineOfLetter(char line) {
         switch (line) {
             case 'A' : return 1;
             case 'B' : return 2;

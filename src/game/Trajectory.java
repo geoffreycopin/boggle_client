@@ -1,6 +1,7 @@
 package game;
 
 import errors.ParsingError;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 
@@ -29,5 +30,16 @@ public class Trajectory {
 
     public Integer[] getIndexes() {
         return indexes;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (Integer i: getIndexes()) {
+            Pair<Character, Integer> coordinates = Grid.coordinatesOfIndex(i);
+            builder.append(coordinates.getKey());
+            builder.append(coordinates.getValue());
+        }
+        return builder.toString();
     }
 }

@@ -57,6 +57,7 @@ public class CLIClientListener implements BoggleClientListener {
 
     @Override
     public void onTurnStart(TurnStart t) {
+        turn++;
         System.out.println("##### DEBUT DU TOUR #####");
         printGrid(t.getGrid(), turn + 1);
     }
@@ -101,7 +102,7 @@ public class CLIClientListener implements BoggleClientListener {
         System.out.println(message + "\n");
     }
 
-    private void printGrid(Grid grid, int turn) {
+    public static void printGrid(Grid grid, int turn) {
         System.out.println("######## TOUR" + turn + " ########");
         System.out.print("\n");
         for (int i = 0; i < 4; i++) {
@@ -114,7 +115,7 @@ public class CLIClientListener implements BoggleClientListener {
         System.out.print("\n");
     }
 
-    private void printScores(HashMap<String, Integer> scores) {
+    private static void printScores(HashMap<String, Integer> scores) {
         System.out.println("######## SCORES #######");
         System.out.print("\n");
         for (String player: scores.keySet()) {
@@ -123,7 +124,7 @@ public class CLIClientListener implements BoggleClientListener {
         System.out.print("\n");
     }
 
-    private void printWords(HashMap<String, ArrayList<String>> words) {
+    private static void printWords(HashMap<String, ArrayList<String>> words) {
         System.out.println("######### MOTS ########");
         System.out.print("\n");
         for (String player: words.keySet()) {

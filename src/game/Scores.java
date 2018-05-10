@@ -26,10 +26,6 @@ public class Scores {
 
     public static HashMap<String, ArrayList<String>> parsePlayedWords(Set<String> players,
                                                                       String words) throws ParsingError {
-        if (! words.matches("\\w+\\*\\w+(\\*\\w+)*")) {
-            throw new ParsingError(words + " is not a valid words String !");
-        }
-
         String[] components = words.split("\\*");
         if (! players.contains(components[0])) {
             throw new ParsingError(words + " should start with a username !");
